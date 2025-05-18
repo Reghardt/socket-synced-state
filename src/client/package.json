@@ -1,0 +1,27 @@
+{
+  "name": "@socket-synced-state/client",
+  "version": "0.0.1",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "bundle": "tsup createClientProxy.ts createSSSContext.tsx useSocketSyncedState.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.10.0",
+  "dependencies": {
+    "@socket-synced-state/server": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3",
+    "@types/react": "^19.0.1",
+    "@types/react-dom": "^19.0.1"
+  },
+  "peerDependencies": {
+    "socket.io-client": "^4.8.1",
+    "zod": "^4.0.0-beta.20250424T163858",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  }
+}

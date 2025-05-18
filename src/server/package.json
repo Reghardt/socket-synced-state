@@ -1,0 +1,20 @@
+{
+  "name": "@socket-synced-state/server",
+  "version": "0.0.1",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "bundle": "tsup socketSyncedState.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.10.0",
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  },
+  "peerDependencies": {
+    "socket.io": "^4.8.1",
+    "zod": "^4.0.0-beta.20250424T163858"
+  }
+}

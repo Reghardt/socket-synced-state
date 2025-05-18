@@ -1,0 +1,22 @@
+{
+  "name": "socket-synced-state",
+  "version": "0.0.1",
+  "private": "true",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "bundle:client": "pnpm --filter @socket-synced-state/client bundle",
+    "bundle:server": "pnpm --filter @socket-synced-state/server bundle",
+    "bundle": "pnpm concurrently \"pnpm bundle:server\" \"pnpm bundle:client\"",
+    "publish": "npm publish --workspaces --access public"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.10.0",
+  "devDependencies": {
+    "tsup": "^8.5.0",
+    "typescript": "^5.8.3",
+    "concurrently": "^9.1.2"
+  }
+}
