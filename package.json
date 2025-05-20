@@ -5,9 +5,9 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "bundle:client": "pnpm --filter @socket-synced-state/client bundle",
-    "bundle:server": "pnpm --filter @socket-synced-state/server bundle",
-    "bundle": "pnpm concurrently \"pnpm bundle:server\" \"pnpm bundle:client\"",
+    "build:client": "pnpm --filter @socket-synced-state/client build",
+    "build:server": "pnpm --filter @socket-synced-state/server build",
+    "build": "pnpm concurrently \"pnpm build:server\" \"pnpm build:client\"",
     "publish": "npm publish --workspaces --access public"
   },
   "keywords": [],
