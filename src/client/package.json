@@ -1,6 +1,6 @@
 {
   "name": "@socket-synced-state/client",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "",
   "main": "dist/index.mjs",
   "types": "dist/index.d.mts",
@@ -14,14 +14,13 @@
   "author": "",
   "license": "ISC",
   "packageManager": "pnpm@10.10.0",
-  "dependencies": {
-    "@socket-synced-state/server": "workspace:*"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/react": "^19.0.1",
     "@types/react-dom": "^19.0.1",
     "tsdown": "^0.11.12",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "@socket-synced-state/server": "workspace:*"
   },
   "peerDependencies": {
     "react": "^19.0.0",
