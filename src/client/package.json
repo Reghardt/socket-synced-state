@@ -1,8 +1,12 @@
 {
   "name": "@socket-synced-state/client",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "",
-  "main": "dist/index.js",
+  "main": "dist/index.mjs",
+  "types": "dist/index.d.mts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsdown"
   },
