@@ -5,7 +5,7 @@ type TransformedStatesToHookFunctions<OriginalValueTypesMap extends Record<strin
   [K in keyof OriginalValueTypesMap]: (
     initialValue: OriginalValueTypesMap[K]["initial"]
   ) => [
-    OriginalValueTypesMap[K]["type"] | undefined,
+    OriginalValueTypesMap[K]["type"],
     (
       updater:
         | OriginalValueTypesMap[K]["type"]
