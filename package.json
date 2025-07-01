@@ -8,7 +8,14 @@
     "build:client": "pnpm --filter @socket-synced-state/client build",
     "build:server": "pnpm --filter @socket-synced-state/server build",
     "build": "pnpm concurrently \"pnpm build:server\" \"pnpm build:client\"",
-    "publish": "npm publish --workspaces --access public"
+    "publish": "npm publish --workspaces --access public",
+    "dev:client": "pnpm --filter @socket-synced-state/client dev",
+    "dev:server": "pnpm --filter @socket-synced-state/server dev",
+    "dev-test:client": "pnpm --filter @mono/client dev",
+    "dev-test:server": "pnpm --filter @mono/server dev",
+    "dev": "pnpm concurrently \"pnpm dev:server\" \"pnpm sleep && pnpm dev-test:server\" \"pnpm dev:client\" \"pnpm dev-test:client\"",
+    "sleep": "node -e \"setTimeout(() => process.exit(0), 1000)\""
+
   },
   "keywords": [],
   "author": "",

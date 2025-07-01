@@ -2,13 +2,15 @@
   "name": "@socket-synced-state/client",
   "version": "0.0.5",
   "description": "",
-  "main": "dist/index.mjs",
-  "types": "dist/index.d.mts",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "tsdown"
+    "build": "tsdown",
+    "dev": "tsdown --watch"
   },
   "keywords": [],
   "author": "",

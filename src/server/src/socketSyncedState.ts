@@ -28,6 +28,7 @@ export function createSocketState<T>(
 
     socket.on(`set_${eventName}`, (incoming) => {
       // console.log(`Received ${eventName} update:`, incoming);
+
       try {
         const parsed = schema.parse(incoming);
         if (hooks?.preCommit) {

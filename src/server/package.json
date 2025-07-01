@@ -2,20 +2,22 @@
   "name": "@socket-synced-state/server",
   "version": "0.0.5",
   "description": "",
-  "main": "dist/index.mjs",
-  "types": "dist/index.d.mts",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "tsdown"
+    "build": "tsdown",
+    "dev": "tsdown --watch"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "packageManager": "pnpm@10.10.0",
   "devDependencies": {
-    "tsdown": "^0.11.12",
+    "tsdown": "^0.12.9",
     "typescript": "^5.8.3"
   },
   "peerDependencies": {
