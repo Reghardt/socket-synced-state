@@ -1,11 +1,11 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { io, type Socket } from "socket.io-client";
-import { createClientProxy } from "./createClientProxy";
+import { createClientStateProxy } from "./createClientStateProxy";
 
 export function createSSSContext<T extends Record<string, any>>() {
   type SSSContext = {
     socket: Socket | null;
-    state: ReturnType<typeof createClientProxy<T>>;
+    state: ReturnType<typeof createClientStateProxy<T>>;
   };
 
   const SocketContext = createContext<SSSContext | null>(null);
@@ -25,7 +25,7 @@ export function createSSSContext<T extends Record<string, any>>() {
 
     return (
       <SocketContext.Provider
-        value={{ socket, state: createClientProxy<T>(socket) }}
+        value={{ socket, state: createClientStateProxy<T>(socket) }}
       >
         {children}
       </SocketContext.Provider>

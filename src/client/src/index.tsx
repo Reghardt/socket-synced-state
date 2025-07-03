@@ -1,2 +1,2 @@
-export * from "./createClientProxy";
+export * from "./createClientStateProxy";
 export * from "./createSSSContext";
