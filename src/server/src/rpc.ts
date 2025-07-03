@@ -1,5 +1,4 @@
 import type { Server, Socket } from "socket.io";
-import z from "zod";
 
 export function createSocketProcedure<TParams, TResult>(
   io: Server,
@@ -13,7 +12,7 @@ export function createSocketProcedure<TParams, TResult>(
   };
 
   const register = (socket: Socket) => {
-    socket.on(`${eventName}`, (incomming) => {
+    socket.on(`rpc_${eventName}`, (incomming) => {
       call(incomming);
     });
   };

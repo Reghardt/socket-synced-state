@@ -1,11 +1,16 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { io, type Socket } from "socket.io-client";
 import { createClientStateProxy } from "./createClientStateProxy";
+import { createClientProcedureProxy } from "./rpc";
 
-export function createSSSContext<T extends Record<string, any>>() {
+export function createSSSContext<
+  T extends Record<string, any>,
+  U extends Record<string, any>
+>() {
   type SSSContext = {
     socket: Socket | null;
     state: ReturnType<typeof createClientStateProxy<T>>;
+    procedures: ReturnType<typeof createClientProcedureProxy<U>>;
   };
 
   const SocketContext = createContext<SSSContext | null>(null);
@@ -25,7 +30,11 @@ export function createSSSContext<T extends Record<string, any>>() {
 
     return (
       <SocketContext.Provider
-        value={{ socket, state: createClientStateProxy<T>(socket) }}
+        value={{
+          socket,
+          state: createClientStateProxy<T>(socket),
+          procedures: createClientProcedureProxy<U>(socket),
+        }}
       >
         {children}
       </SocketContext.Provider>
@@ -33,7 +42,10 @@ export function createSSSContext<T extends Record<string, any>>() {
   };
 
   const useSSS = () => {
-    const context = useContext(SocketContext)?.state;
+    const context = {
+      state: useContext(SocketContext)?.state,
+      proc: useContext(SocketContext)?.procedures,
+    };
     if (!context) throw new Error("useSSS must be used within an SSSProvider");
     return context;
   };

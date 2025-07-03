@@ -38,7 +38,8 @@ export function useRpc<Params, Result = unknown>(
 
       console.log("rpc");
 
-      socket.emit("rpc", { method, params }, (response: any) => {
+      socket.emit(`rpc_${method}`, { method, params }, (response: any) => {
+        console.log(`rpc_${method}`);
         if (response?.error) {
           options.onError?.(new Error(response.error));
         } else {

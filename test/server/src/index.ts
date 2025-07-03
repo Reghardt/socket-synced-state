@@ -7,7 +7,6 @@ import {
   defineState,
   registerAllStates,
   type CreateClientSideStateTypes,
-  createSocketProcedure,
   createSocketProcedures,
   defineProcedure,
   registerAllProcedures,
