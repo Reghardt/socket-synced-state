@@ -7,6 +7,11 @@ import {
   defineState,
   registerAllStates,
   type CreateClientSideStateTypes,
+  createSocketProcedure,
+  createSocketProcedures,
+  defineProcedure,
+  registerAllProcedures,
+  type CreateClientSideProcedureTypes,
 } from "@socket-synced-state/server";
 import { z } from "zod/v3";
 import { Server } from "socket.io";
@@ -35,7 +40,14 @@ const states = createSocketSyncedState({
   ),
 });
 
+const procs = createSocketProcedures({
+  test: defineProcedure(io, (val: string) => {
+    return val;
+  }),
+});
+
 export type States = CreateClientSideStateTypes<typeof states>;
+export type Procs = CreateClientSideProcedureTypes<typeof procs>;
 
 io.on("connection", (socket) => {
   console.log("a user connected");
@@ -44,9 +56,14 @@ io.on("connection", (socket) => {
     console.log("user disconnected");
   });
 
+  // this is just a test for now:
+  // shows returning void
+
   registerAllStates(states, socket);
+  registerAllProcedures(procs, socket);
 });
 
 setInterval(() => {
   console.log(`State on server: ${states.myNumStateX.get()}`);
+  // console.log(procs.test.call("Hello"));
 }, 1000);

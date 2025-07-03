@@ -78,11 +78,15 @@ export type ServerState<T, Z> = {
 };
 
 export type ServerStates<T extends StateDefinitions> = {
-  [K in keyof T]: T[K] extends StateDefinition<infer U, infer Z> ? ServerState<U, Z> : never;
+  [K in keyof T]: T[K] extends StateDefinition<infer U, infer Z>
+    ? ServerState<U, Z>
+    : never;
 };
 
 export type CreateClientSideStateTypes<T> = {
-  [K in keyof T]: T[K] extends ServerState<infer U, infer Z> ? { type: U; initial: Z } : never;
+  [K in keyof T]: T[K] extends ServerState<infer U, infer Z>
+    ? { type: U; initial: Z }
+    : never;
 };
 
 // defineState now has two generic parameters
@@ -104,7 +108,9 @@ export function defineState<T, Z extends T>(
 }
 
 // Register function that creates socket-synced states
-export function createSocketSyncedState<T extends StateDefinitions>(methods: T): ServerStates<T> {
+export function createSocketSyncedState<T extends StateDefinitions>(
+  methods: T
+): ServerStates<T> {
   const states = {} as ServerStates<T>;
 
   for (const [key, definition] of Object.entries(methods)) {
@@ -126,7 +132,10 @@ export function createSocketSyncedState<T extends StateDefinitions>(methods: T):
   return states;
 }
 
-export function registerAllStates<T extends StateDefinitions>(states: ServerStates<T>, socket: Socket): void {
+export function registerAllStates<T extends StateDefinitions>(
+  states: ServerStates<T>,
+  socket: Socket
+): void {
   Object.entries(states).forEach(([key, state]) => {
     state.register(socket);
   });
