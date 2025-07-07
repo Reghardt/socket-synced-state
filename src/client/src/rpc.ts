@@ -4,9 +4,10 @@ import { Socket } from "socket.io-client";
 type TransformProcedureToHookFunctions<
   OriginalProcedureTypesMap extends Record<string, any>
 > = {
-  [K in keyof OriginalProcedureTypesMap]: (
-    onSuccess?: (result: OriginalProcedureTypesMap[K]["result"]) => void
-  ) => {
+  [K in keyof OriginalProcedureTypesMap]: (options: {
+    onSuccess?: (result: OriginalProcedureTypesMap[K]["result"]) => void;
+    onError?: (err: Error) => void;
+  }) => {
     call: (params: OriginalProcedureTypesMap[K]["params"]) => void;
   };
 };
