@@ -6,7 +6,14 @@ import { createClientProcedureProxy } from "./rpc";
 export function createSSSContext<
   T extends Record<string, any>,
   U extends Record<string, any>
->() {
+>(): {
+  SSSProvider: React.FC<{ children: React.ReactNode }>;
+  useSSS: () => {
+    state: ReturnType<typeof createClientStateProxy<T>> | undefined;
+    proc: ReturnType<typeof createClientProcedureProxy<U>> | undefined;
+  };
+  useSocket: () => Socket | null;
+} {
   type SSSContext = {
     socket: Socket | null;
     state: ReturnType<typeof createClientStateProxy<T>>;
@@ -15,7 +22,9 @@ export function createSSSContext<
 
   const SocketContext = createContext<SSSContext | null>(null);
 
-  const SSSProvider = ({ children }: { children: React.ReactNode }) => {
+  const SSSProvider: React.FC<{ children: React.ReactNode }> = ({
+    children,
+  }) => {
     const [socket, setSocket] = useState<Socket | null>(null);
 
     useEffect(() => {
@@ -42,17 +51,16 @@ export function createSSSContext<
   };
 
   const useSSS = () => {
-    const context = {
-      state: useContext(SocketContext)?.state,
-      proc: useContext(SocketContext)?.procedures,
-    };
+    const context = useContext(SocketContext);
     if (!context) throw new Error("useSSS must be used within an SSSProvider");
-    return context;
+    return {
+      state: context.state,
+      proc: context.procedures,
+    };
   };
 
   const useSocket = () => {
-    const socket = useContext(SocketContext)?.socket ?? null;
-    return socket;
+    return useContext(SocketContext)?.socket ?? null;
   };
 
   return { SSSProvider, useSSS, useSocket };

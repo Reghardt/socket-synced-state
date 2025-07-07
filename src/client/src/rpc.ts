@@ -21,7 +21,7 @@ export function useRpc<Params, Result = unknown>(
   method: string,
   options: RpcOptions<Result> = {}
 ) {
-  return useCallback(
+  const call = useCallback(
     (params: Params) => {
       if (!socket) {
         options.onError?.(new Error("Socket not connected"));
@@ -29,6 +29,7 @@ export function useRpc<Params, Result = unknown>(
       }
 
       try {
+        // possibly validate params here
       } catch (err) {
         options.onError?.(
           new Error("Validation failed: " + (err as Error).message)
@@ -36,19 +37,28 @@ export function useRpc<Params, Result = unknown>(
         return;
       }
 
-      console.log("rpc");
+      console.log("rpc fire");
 
-      socket.emit(`rpc_${method}`, { method, params }, (response: any) => {
-        console.log(`rpc_${method}`);
-        if (response?.error) {
-          options.onError?.(new Error(response.error));
-        } else {
-          options.onSuccess?.(response.result as Result);
+      socket.emit(
+        `rpc_${method}`,
+        (() => {
+          console.log("args", { method, params });
+          return { method, params };
+        })(),
+        (response: any) => {
+          console.log(`rpc_${method}`, response);
+          if (response?.error) {
+            options.onError?.(new Error(response.error));
+          } else {
+            options.onSuccess?.(response.result as Result);
+          }
         }
-      });
+      );
     },
     [socket, method]
   );
+
+  return { call };
 }
 
 export function createClientProcedureProxy<T extends Record<string, any>>(

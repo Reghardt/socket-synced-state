@@ -7,13 +7,20 @@ export function createSocketProcedure<TParams, TResult>(
 ) {
   const call = (params: TParams) => {
     const result = handler(params);
-    io.emit(eventName, result); // broadcast update to all clients
+    console.log("emitting", eventName);
+    io.emit(`rpc_${eventName}`, "from server"); // broadcast update to all clients
     return result;
   };
 
   const register = (socket: Socket) => {
-    socket.on(`rpc_${eventName}`, (incomming) => {
-      call(incomming);
+    socket.on(`rpc_${eventName}`, async (incoming, callback) => {
+      console.log("incoming from client", incoming);
+      try {
+        const result = await call(incoming.params);
+        callback?.({ result }); // return result to client
+      } catch (err: any) {
+        callback?.({ error: err?.message || "Unknown error" }); // return error
+      }
     });
   };
 

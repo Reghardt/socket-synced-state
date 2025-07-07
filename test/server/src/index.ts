@@ -40,8 +40,10 @@ const states = createSocketSyncedState({
 });
 
 const procs = createSocketProcedures({
-  test: defineProcedure(io, (val: string) => {
-    return val;
+  test: defineProcedure(io, (params: string) => {
+    console.log("test called!");
+    console.log("params", params);
+    return params + 2;
   }),
 });
 

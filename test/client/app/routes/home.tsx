@@ -11,8 +11,10 @@ export function meta({}: Route.MetaArgs) {
 export default function Home() {
   const sss = useSSS();
   const [num, setNum] = sss.state!.myNumStateX(100);
-  const pr = sss.proc!.test((res) => {
-    console.log(res);
+  const pr = sss.proc!.test({
+    onSuccess: (res) => {
+      console.log(res);
+    },
   });
   return (
     <div>
@@ -21,7 +23,7 @@ export default function Home() {
         <button onClick={() => setNum(num + 1)}>Increment</button>
       </div>
       <div>
-        <button onClick={() => pr.call("test")}>Func</button>
+        <button onClick={() => pr.call("hello")}>Func</button>
       </div>
     </div>
   );
