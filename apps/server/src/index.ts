@@ -1,29 +1,48 @@
-import { createStates, defineState, listen, registerStates } from "sss-server";
+import {
+  createGlobalStates,
+  createNodeDataAdapter,
+  createNodeSocketAdapter,
+  defineState,
+  listen,
+  registerGlobalStates,
+  type CreateClientSideStateTypes,
+} from "sss-server";
 import z from "zod";
+import { WebSocketServer } from "ws";
 
-const states = createStates({
+const clients = new Set<WebSocket>();
+
+const states = createGlobalStates({
   state_1: defineState(z.object({ val: z.number(), str: z.string() }), {
     val: 42,
     str: "Hello",
   }),
   state_2: defineState(z.number(), 100),
+  state_3: defineState(z.number(), 100),
 });
 
-const socket = new WebSocket("ws://localhost:8080");
+export type States = CreateClientSideStateTypes<typeof states>;
 
-socket.addEventListener("open", (event) => {
-  console.log("WebSocket connection established!");
-  registerStates(states, socket);
-});
+const wss = new WebSocketServer({ port: 8000 });
 
-socket.addEventListener("message", (event) => {
-  listen(states, event);
-});
+console.log("WebSocket server started on ws://localhost:8000");
 
-socket.addEventListener("close", (event) => {
-  console.log("WebSocket connection closed:", event.code, event.reason);
-});
+wss.on("connection", (socket) => {
+  console.log("Client connected!");
 
-socket.addEventListener("error", (error) => {
-  console.error("WebSocket error:", error);
+  clients.add(createNodeSocketAdapter(socket));
+  console.log("a client connected!");
+  registerGlobalStates(states, clients);
+
+  socket.on("message", (data) => {
+    listen(states, createNodeDataAdapter(data));
+  });
+
+  socket.on("close", (code, reason) => {
+    console.log("Client disconnected:", code, reason?.toString());
+  });
+
+  socket.on("error", (error) => {
+    console.error("WebSocket error:", error);
+  });
 });
