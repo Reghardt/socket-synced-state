@@ -1,3 +1,5 @@
+import z from "zod";
+import { WebSocketServer } from "ws";
 import {
   createGlobalStates,
   createNodeDataAdapter,
@@ -6,9 +8,7 @@ import {
   listen,
   registerGlobalStates,
   type CreateClientSideStateTypes,
-} from "sss-server";
-import z from "zod";
-import { WebSocketServer } from "ws";
+} from "@socket-synced-state/server";
 
 const clients = new Set<WebSocket>();
 
