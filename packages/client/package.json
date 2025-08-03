@@ -1,20 +1,8 @@
 {
-  "name": "sss-client",
-  "version": "0.0.0",
+  "name": "@socket-synced-state/client",
+  "version": "0.0.7",
   "packageManager": "pnpm@10.11.0",
-  "description": "A starter for creating a tsdown package.",
   "type": "module",
-  "license": "MIT",
-  "homepage": "https://github.com/gugustinette/create-tsdown#readme",
-  "bugs": {
-    "url": "https://github.com/gugustinette/create-tsdown/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/gugustinette/create-tsdown.git"
-  },
-  "author": "三咲智子 Kevin Deng <sxzz@sxzz.moe>",
-  "funding": "https://github.com/sponsors/sxzz",
   "files": [
     "dist"
   ],
