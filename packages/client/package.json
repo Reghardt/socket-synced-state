@@ -1,6 +1,6 @@
 {
   "name": "@socket-synced-state/client",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "packageManager": "pnpm@10.11.0",
   "type": "module",
   "files": [
