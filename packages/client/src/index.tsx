@@ -1,20 +1,20 @@
 import { atom, createStore, Provider, useAtom } from 'jotai'
-import { createContext, useContext, useEffect } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 import type { Packet } from '@socket-synced-state/server'
 
 const myStore = createStore()
 
 const _stateMap = new Map<string, ReturnType<typeof atom<unknown>>>()
 
-function send<T>(websocket: WebSocket, data: Packet<T>) {
-  if (websocket.readyState === WebSocket.OPEN) {
+function send<T>(websocket: WebSocket | null, data: Packet<T>) {
+  if (websocket?.readyState === WebSocket.OPEN) {
     console.log('new value', data)
     websocket.send(JSON.stringify(data))
   }
 }
 
 export function useSocketSyncedState(
-  websocket: WebSocket,
+  websocket: WebSocket | null,
   eventName: string,
   stateMap: typeof _stateMap,
 ) {
@@ -54,7 +54,7 @@ type TransformedStatesToHookFunctions<
 }
 
 export function createClientStateProxy<T extends Record<string, any>>(
-  websocket: WebSocket,
+  websocket: WebSocket | null,
 ) {
   return new Proxy({} as TransformedStatesToHookFunctions<T>, {
     get: (target, prop) => {
@@ -68,37 +68,37 @@ export function createClientStateProxy<T extends Record<string, any>>(
 
 export function createSSSContext<T extends Record<string, any>>(wsUri: string) {
   type SSSContext = {
-    websocket: WebSocket
+    websocket: WebSocket | null
     state: ReturnType<typeof createClientStateProxy<T>>
   }
 
-  // const wsUri = 'ws://localhost:8000'
-  const websocket = new WebSocket(wsUri)
-  console.log(websocket)
+  // // const wsUri = 'ws://localhost:8000'
+  // const websocket = new WebSocket(wsUri)
+  // console.log(websocket)
 
-  websocket.addEventListener('open', (e) => {
-    console.log('Connection successful!', _stateMap.size)
+  // websocket.addEventListener('open', (e) => {
+  //   console.log('Connection successful!', _stateMap.size)
 
-    _stateMap.forEach((state, key) => {
-      console.log('STATE', key)
-      send(websocket, {
-        name: key,
-        request: 'get',
-        value: undefined,
-      })
-    })
-  })
+  //   _stateMap.forEach((state, key) => {
+  //     console.log('STATE', key)
+  //     send(websocket, {
+  //       name: key,
+  //       request: 'get',
+  //       value: undefined,
+  //     })
+  //   })
+  // })
 
-  websocket.addEventListener('message', (e) => {
-    const data = JSON.parse(e.data)
-    console.log(data)
-    const atm = _stateMap.get(data.name)
-    if (atm) {
-      myStore.set(atm, data.value)
-      // const value = myStore.get(atm);
-      // console.log("val", value);
-    }
-  })
+  // websocket.addEventListener('message', (e) => {
+  //   const data = JSON.parse(e.data)
+  //   console.log(data)
+  //   const atm = _stateMap.get(data.name)
+  //   if (atm) {
+  //     myStore.set(atm, data.value)
+  //     // const value = myStore.get(atm);
+  //     // console.log("val", value);
+  //   }
+  // })
 
   const SocketContext = createContext<SSSContext | null>(null)
 
@@ -113,12 +113,49 @@ export function createSSSContext<T extends Record<string, any>>(wsUri: string) {
   const SSSProvider: React.FC<{ children: React.ReactNode }> = ({
     children,
   }) => {
+    const [ws, setWs] = useState<WebSocket | null>(null)
+
+    useEffect(() => {
+      // const wsUri = 'ws://localhost:8000'
+      const websocket = new WebSocket(wsUri)
+      console.log(websocket)
+
+      websocket.addEventListener('open', () => {
+        console.log('Connection successful!', _stateMap.size)
+
+        _stateMap.forEach((state, key) => {
+          console.log('STATE', key)
+          send(websocket, {
+            name: key,
+            request: 'get',
+            value: undefined,
+          })
+        })
+      })
+
+      websocket.addEventListener('message', (e) => {
+        const data = JSON.parse(e.data)
+        console.log(data)
+        const atm = _stateMap.get(data.name)
+        if (atm) {
+          myStore.set(atm, data.value)
+          // const value = myStore.get(atm);
+          // console.log("val", value);
+        }
+      })
+      setWs(websocket)
+
+      return () => {
+        websocket.close()
+      }
+    }, [])
+
     return (
       <Provider store={myStore}>
         <SocketContext.Provider
           value={{
-            websocket,
-            state: createClientStateProxy<T>(websocket),
+            websocket: ws,
+            state: createClientStateProxy<T>(ws),
           }}
         >
           {children}
