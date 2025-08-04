@@ -4,6 +4,8 @@ export default defineConfig([
   {
     entry: ['./src/index.tsx'],
     platform: 'neutral',
-    dts: true,
+    dts: {
+      sourcemap: true,
+    },
   },
 ])

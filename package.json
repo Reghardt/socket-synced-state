@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "pnpm run --filter sss-server --filter sss-client build",
+    "build": "pnpm run --filter @socket-synced-state/server --filter @socket-synced-state/client build",
     "dev": "pnpm run --filter server dev"
   },
   "keywords": [],

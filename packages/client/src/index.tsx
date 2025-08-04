@@ -1,6 +1,6 @@
 import { atom, createStore, Provider, useAtom } from 'jotai'
 import { createContext, useContext } from 'react'
-import type { Packet } from 'sss-server'
+import type { Packet } from '@socket-synced-state/server'
 
 const myStore = createStore()
 
