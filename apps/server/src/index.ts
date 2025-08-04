@@ -35,6 +35,7 @@ wss.on("connection", (socket) => {
   registerGlobalStates(states, clients);
 
   socket.on("message", (data) => {
+    console.log("Message!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     listen(states, createNodeDataAdapter(data));
   });
 

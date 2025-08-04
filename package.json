@@ -5,12 +5,20 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "pnpm run --filter @socket-synced-state/server --filter @socket-synced-state/client build",
-    "dev": "pnpm run --filter server dev"
+    "dev:client": "pnpm --filter client dev",
+    "dev:client-ssr": "pnpm --filter client-ssr dev",
+    "dev:server": "pnpm --filter server dev",
+    "build:sss-client": "pnpm run --filter @socket-synced-state/client build",
+    "build:sss-server": "pnpm run --filter @socket-synced-state/server build",
+    "build": "pnpm concurrently \"pnpm build:sss-client\" \"pnpm run build:sss-server\"",
+    "dev": "pnpm concurrently \"pnpm dev:server\" \"pnpm dev:client\"",
+    "dev-ssr": "pnpm concurrently \"pnpm dev:server\" \"pnpm dev:client-ssr\""
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "packageManager": "pnpm@10.10.0"
+  "packageManager": "pnpm@10.10.0",
+  "devDependencies": {
+    "concurrently": "^9.2.0"
+  }
 }

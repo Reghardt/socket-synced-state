@@ -1,5 +1,5 @@
 import { atom, createStore, Provider, useAtom } from 'jotai'
-import { createContext, useContext } from 'react'
+import { createContext, useContext, useEffect } from 'react'
 import type { Packet } from '@socket-synced-state/server'
 
 const myStore = createStore()
@@ -74,9 +74,11 @@ export function createSSSContext<T extends Record<string, any>>(wsUri: string) {
 
   // const wsUri = 'ws://localhost:8000'
   const websocket = new WebSocket(wsUri)
+  console.log(websocket)
 
   websocket.addEventListener('open', (e) => {
-    console.log('Connection successful!', e)
+    console.log('Connection successful!', _stateMap.size)
+
     _stateMap.forEach((state, key) => {
       console.log('STATE', key)
       send(websocket, {
